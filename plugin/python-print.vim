@@ -1,4 +1,17 @@
-" essentially just a macro
+" warning generating function (curtosy of https://vi.stackexchange.com/questions/13384/echo-highlighted-warning-in-one-line)
+
+function! EchoWarning(msg)
+  echohl WarningMsg
+  echo "Warning"
+  echohl None
+  echon ': ' a:msg
+endfunction
+
+" print a warning if PPCOUNTER is already present in document.
+let l:PresentWarning = search('PPCOUNTER', 'n')
+if l:PresentWarning > 0
+	call EchoWarning(join(['PPCOUNTER is already contained ', l:PresentWarning,' times within this file. ']))
+endif
 function PPInsertCounter()
 	let l:pos = getcurpos()
 	let l:pos[1] += 1
@@ -14,8 +27,10 @@ function PPInsertCounterPrint()
 
 	" save position
 	let l:pos = getcurpos()
-	" find file counter
-	call search('PPCOUNTER=\d', 'e')
+	" find file counter, create if not present
+	if search('PPCOUNTER=\d', 'e') == 0
+		call PPInsertCounter()
+	endif
 	normal! yiw
 	normal! 
 	call setpos('.', l:pos)
@@ -33,18 +48,9 @@ function PPClearPrints()
 
 	" save position
 	let l:pos = getcurpos()
-	echo l:pos[1]
-	let l:pos[1] += -1
-	echo l:pos[1]
 	while search('# PPCOUNTER', 'w') > 0
 		normal! dd
-		if getcurpos()[1] <= l:pos[0]
-			" adjust for removed lines (before this line)
-			let l:pos[1] +=-1
-		endif
-		echo l:pos[1]
 	endwhile
-	let l:pos[1] +=-1
 
 	" reset environment and position
 	call setpos('.', l:pos)
