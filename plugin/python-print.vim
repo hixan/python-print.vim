@@ -16,15 +16,33 @@ function! PPInsertCounterPrint()
 	" find file counter, create if not present
 	if search('PPCOUNTER=\d', 'e') == 0
 		call PPInsertCounter()
+		call PPInsertCounterPrint()
+	else
+		normal! yiw
+		normal! 
+		call setpos('.', l:pos)
+		normal! oprint('
+		normal! pA')  # PPCOUNTER
 	endif
-	normal! yiw
-	normal! 
-	call setpos('.', l:pos)
-	normal! oprint('
-	normal! pA')  # PPCOUNTER
 
 	let &clipboard=l:clip
 	
+endfunction
+
+function! PPValuePrint()
+	" use a different clipboard so the users doesnt get messed up
+	let l:clip = &clipboard
+	set clipboard=
+
+	" save position
+	let l:pos = getcurpos()
+
+	normal! yiw
+	normal! oprint('
+	normal! pA', 
+	normal! pA)  # PPCOUNTER
+
+	let &clipboard=l:clip
 endfunction
 
 function! PPClearPrints()
