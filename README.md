@@ -1,7 +1,7 @@
 # python-print.vim
 Simple vim plugin to add print satements to python scripts for low level debugging.
 
-Easily add a `print(n)` to your code! Having bad debugging practises has never been easier.
+Easily add a `print('variable_name', variable_name)` or a `print(1)` to your code! Having bad debugging practices has never been easier.
 When finished, say goodbye to erroneous artefact print statements by deleting all generated print statements.
 
 ## Installation:
@@ -23,8 +23,7 @@ adding these lines will assign my preferred keybindings:
 nnoremap <leader>p :call PPInsertCounterPrint()<CR>
 nnoremap <leader>d :call PPClearPrints()<CR>
 ```
-they are defaulted to  `\p` for adding a print statement and `\d` for deleting all print statements (including the tracker comment)
+
 
 ## TODO
 * create a vim doc file
-* support for printing variables at points?
